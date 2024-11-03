@@ -62,7 +62,7 @@ def get_args():
                         help='Use gradient accumulation')
 
     parser.add_argument('--warm_up_epochs', type=int, default=3)
-    parser.add_argument('--num_epochs', type=int, default=50)
+    parser.add_argument('--num_epochs', type=int, default=10)
 
     parser.add_argument('-lr', '--learning_rate', type=float, default=0.001)
     parser.add_argument('-s', '--save_dir', type=str, required=True,
@@ -222,6 +222,7 @@ class F3Tennis(BaseRGBModel):
                          backward_only=(batch_idx + 1) % acc_grad_iter != 0)
 
                 epoch_loss += loss.detach().item()
+        print( epoch_loss / len(loader) )
         return epoch_loss / len(loader)     # Avg loss
 
     def predict(self, frame, use_amp=True):
@@ -602,8 +603,9 @@ def main(args):
 
     classes, train_data, val_data, train_data_frames, val_data_frames = get_datasets(args)
 
-    def worker_init_fn(id):
+    def worker_init_fn(id, epoch=0):
         random.seed(id + epoch * 100)
+        
     loader_batch_size = args.batch_size // args.acc_grad_iter
     train_loader = DataLoader(
         train_data, shuffle=False, batch_size=loader_batch_size,
@@ -613,6 +615,10 @@ def main(args):
         val_data, shuffle=False, batch_size=loader_batch_size,
         pin_memory=True, num_workers=BASE_NUM_WORKERS,
         worker_init_fn=worker_init_fn)
+
+    # for batch_idx, batch in enumerate(train_loader):
+    #     print(f"Batch {batch_idx}:", batch)
+    #     break  # Print only the first batch for inspection
 
     model = F3Tennis(len(classes), args.feature_arch, args.temporal_arch, clip_len=args.clip_len, step=args.stride, 
                      multi_gpu=args.gpu_parallel)
