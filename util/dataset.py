@@ -4,7 +4,8 @@ from util.io import load_text
 
 
 DATASETS = [
-    'f3tennis'
+    'f3tennis',
+    'f3tabletennis'
 ]
 
 

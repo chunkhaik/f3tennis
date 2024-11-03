@@ -299,7 +299,7 @@ def evaluate(model, dataset, classes, delta=0):
 
         fine_pred = np.zeros_like(fine_scores, int)
         for i in range(len(fine_scores)):
-            for start, end in [[0, 2], [2, 5], [5, 8], [8, 10], [10, 16], [16, 24], [24, 26], [26, 30]]:
+            for start, end in [[0, 2], [2, -1]]:
                 max_idx = np.argmax(fine_scores[i, start:end])
                 fine_pred[i, start + max_idx] = 1
 
@@ -569,6 +569,7 @@ def store_config(file_path, args, num_epochs, classes):
         'gpu_parallel': args.gpu_parallel,
         'epoch_num_frames': EPOCH_NUM_FRAMES
     }
+    print(file_path)
     store_json(file_path, config, pretty=True)
 
 
@@ -633,7 +634,7 @@ def main(args):
         epoch += 1
 
     # Write it to console
-    store_config('/dev/stdout', args, num_epochs, classes)
+    store_config('train_output/out', args, num_epochs, classes)
 
     for epoch in range(epoch, num_epochs):
         train_loss = model.epoch(train_loader, optimizer, scaler, lr_scheduler=lr_scheduler, acc_grad_iter=args.acc_grad_iter)

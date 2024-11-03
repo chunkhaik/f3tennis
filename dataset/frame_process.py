@@ -22,7 +22,7 @@ IMAGENET_STD = [0.229, 0.224, 0.225]
 
 class FrameReader:
 
-    IMG_NAME = '{:06d}.jpg'
+    IMG_NAME = '{:04d}.jpg'
 
     def __init__(self, frame_dir, crop_transform, img_transform, same_transform):
         self._frame_dir = frame_dir
@@ -51,9 +51,11 @@ class FrameReader:
             
             if self._frame_dir is not None:
                 frame_path = os.path.join(self._frame_dir, video_name, img_num)
+
             try:
                 if self._frame_dir is not None:
                     img = self.read_frame(frame_path)
+                    
                 if self._crop_transform:
                     if self._same_transform:
                         if rand_crop_state is None:
@@ -77,6 +79,7 @@ class FrameReader:
 
                 if self._frame_dir is not None:
                     ret.append(img)
+            
             except RuntimeError:
                 # print('Missing file!', frame_path)
                 n_pad_end += 1
@@ -305,12 +308,12 @@ class ActionSeqDataset(Dataset):
                         if sub_label in self._class_dict:
                             fine_labels[i, self._class_dict[sub_label] - 1] = 1
 
-        # handedness
-        hand = np.zeros(2, np.int64)
-        if 'far_hand' in video_meta and video_meta['far_hand'] == 'LH':
-            hand[0] = 1
-        if 'near_hand' in video_meta and video_meta['near_hand'] == 'LH':
-            hand[1] = 1
+        # # handedness
+        # hand = np.zeros(2, np.int64)
+        # if 'far_hand' in video_meta and video_meta['far_hand'] == 'LH':
+        #     hand[0] = 1
+        # if 'near_hand' in video_meta and video_meta['near_hand'] == 'LH':
+        #     hand[1] = 1
 
         frames = self._frame_reader.load_frames(
             video_meta['video'], base_idx,
@@ -318,7 +321,7 @@ class ActionSeqDataset(Dataset):
             stride=stride, randomize=not self._is_eval)
 
         return {'frame': frames,
-                'hand': hand,
+                # 'hand': hand,
                 'contains_event': int(np.sum(coarse_labels) > 0),
                 'coarse_label': coarse_labels,
                 'fine_label': fine_labels}
@@ -378,7 +381,7 @@ class ActionSeqVideoDataset(Dataset):
                 (clip_len - overlap_len) * self._stride
             ):
                 has_clip = True
-                self._clips.append((l['video'], l['far_hand'], l['near_hand'], l['fps'], i))
+                self._clips.append((l['video'], l['fps'], i))
             assert has_clip, l
 
     def __len__(self):

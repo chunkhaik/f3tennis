@@ -1,0 +1,16 @@
+forehand
+backhand
+drive
+serve
+step-around-drive
+short-push
+control
+smash
+long-push
+flip
+side-spin
+reverse-pendulum
+spin/no-spin
+normal
+hook
+neutral

@@ -30,7 +30,7 @@ decorator==4.4.2
 decord==0.6.0
 defer==1.0.6
 distro==1.7.0
-distro-info==1.1+ubuntu0.1
+distro-info
 duplicity==0.8.21
 edit-distance==1.0.6
 einops==0.6.1
@@ -143,12 +143,12 @@ PyNaCl==1.5.0
 pyparsing==2.4.7
 pyRFC3339==1.1
 PySocks==1.7.1
-python-apt==2.4.0+ubuntu2
+python-apt
 python-dateutil==2.8.2
 python-debian==0.1.43+ubuntu1.1
 python-dotenv==1.0.0
 pytube==15.0.0
-pytz==2022.1
+pytz
 pyxdg==0.27
 PyYAML==6.0.1
 regex==2023.10.3
@@ -191,9 +191,9 @@ tifffile==2023.9.26
 timm==0.5.4
 tokenizers==0.14.1
 tomli==2.0.1
-torch==2.0.1+cu118
-torchaudio==2.0.2+cu118
-torchvision==0.15.2+cu118
+torch
+torchaudio
+torchvision
 tqdm==4.65.2
 transformers==4.34.0
 trio==0.23.1
@@ -201,7 +201,6 @@ trio-websocket==0.11.1
 triton==2.0.0
 typing_extensions==4.4.0
 tzdata==2023.3
-ubuntu-advantage-tools==8001
 ubuntu-drivers-common==0.0.0
 ufw==0.36.1
 ultralytics==8.0.202
